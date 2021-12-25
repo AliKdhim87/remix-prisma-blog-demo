@@ -1,0 +1,27 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  username     String   @unique
+  passwordHash String
+  createAt     DateTime @default(now())
+  updateAt     DateTime @updatedAt
+  posts        Post[]
+}
+
+model Post {
+  id       String   @id @default(uuid())
+  userId   String
+  title    String
+  body     String
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
